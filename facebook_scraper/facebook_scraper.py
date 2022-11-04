@@ -929,7 +929,7 @@ class FacebookScraper:
                     raise exceptions.UnexpectedResponse("Your request couldn't be processed")
                 elif title.text.lower() in temp_ban_titles:
                     logging.error("Temporarily Banned: " + title.text)
-                    time.sleep(2 * random.randint(15, 60))
+                    time.sleep(60 * random.randint(5, 20))
                     return self.get(url, kwargs)
                 elif ">your account has been disabled<" in response.html.html.lower():
                     raise exceptions.AccountDisabled("Your Account Has Been Disabled")
@@ -1107,6 +1107,7 @@ class FacebookScraper:
                             e,
                         )
 
+                time.sleep(random.randint(1, 30))
                 # if max_past_limit, stop
                 if done:
                     break
