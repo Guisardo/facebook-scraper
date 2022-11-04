@@ -10,6 +10,8 @@ import demjson3 as demjson
 from urllib.parse import parse_qs, urlparse, unquote
 from datetime import datetime
 import os
+import time
+import random
 
 from requests import RequestException
 from requests_html import HTMLSession
@@ -926,7 +928,9 @@ class FacebookScraper:
                 elif title.text.lower() == "error":
                     raise exceptions.UnexpectedResponse("Your request couldn't be processed")
                 elif title.text.lower() in temp_ban_titles:
-                    raise exceptions.TemporarilyBanned(title.text)
+                    logging.critical("TemporarilyBanned: " + title.text)
+                    time.sleep(2 * random.randint(15, 60))
+                    return self.get(url, kwargs)
                 elif ">your account has been disabled<" in response.html.html.lower():
                     raise exceptions.AccountDisabled("Your Account Has Been Disabled")
                 elif (
