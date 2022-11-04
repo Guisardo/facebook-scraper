@@ -947,6 +947,10 @@ class FacebookScraper:
                         "A login (cookies) is required to see this page"
                     )
             return response
+        except requests.exceptions.HTTPError as http_err:
+            logging.error("Retryng %s \n%s", url,  http_err, exc_info=True)
+            time.sleep(random.randint(5, 20))
+            return self.get(url, kwargs)
         except RequestException as ex:
             logger.exception("Exception while requesting URL: %s\nException: %r", url, ex)
             raise
